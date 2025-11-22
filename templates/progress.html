@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Progress Report - Academic Planner{% endblock %}
+
+{% block content %}
+<div class="progress-page">
+    <div class="page-header">
+        <h2>Progress Report</h2>
+        <p class="subtitle">Detailed academic progress overview</p>
+    </div>
+
+    {% if course_progress %}
+        {% for cp in course_progress %}
+        <div class="progress-section">
+            <h3>{{ cp.course.name }}</h3>
+            <div class="progress-details">
+                <p><strong>Credits:</strong> {{ cp.course.credits }}</p>
+                <p><strong>Target Grade:</strong> {{ cp.course.target_grade }}%</p>
+                <p><strong>Current Grade:</strong> {{ cp.course.current_grade if cp.course.current_grade else 'N/A' }}%</p>
+                <p><strong>Assignments:</strong> {{ cp.completed }}/{{ cp.total }} completed</p>
+                {% if cp.avg_grade %}
+                <p><strong>Average Assignment Grade:</strong> {{ "%.1f"|format(cp.avg_grade) }}%</p>
+                {% endif %}
+                <p><strong>Study Hours:</strong> {{ "%.1f"|format(cp.study_hours) }} hours</p>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <p>No courses to display progress for.</p>
+        </div>
+    {% endif %}
+
+    <div class="progress-summary">
+        <h3>Summary</h3>
+        <div class="summary-stats">
+            <p><strong>Total Study Hours Logged:</strong> {{ "%.1f"|format(total_hours) }} hours</p>
+        </div>
+    </div>
+
+    {% if planner.goals %}
+    <div class="progress-section">
+        <h3>Goals</h3>
+        <div class="goals-list">
+            {% for goal in planner.goals %}
+            <div class="goal-item">
+                <h4>{{ goal.description }}</h4>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: {{ goal.progress }}%">
+                        <span class="progress-text">{{ "%.1f"|format(goal.progress) }}%</span>
+                    </div>
+                </div>
+                {% if goal.target_date %}
+                <p class="goal-meta">Target Date: {{ goal.target_date }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

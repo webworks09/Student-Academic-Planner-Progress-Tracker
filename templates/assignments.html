@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Assignments - Academic Planner{% endblock %}
+
+{% block content %}
+<div class="list-page">
+    <div class="page-header">
+        <h2>Assignments</h2>
+        <a href="{{ url_for('add_assignment') }}" class="btn btn-primary">+ Add Assignment</a>
+    </div>
+
+    {% if assignments %}
+        <div class="assignments-list">
+            {% for assignment in assignments %}
+            <div class="assignment-item">
+                <div class="assignment-info">
+                    <h4>{{ assignment.title }}</h4>
+                    <p class="assignment-meta">
+                        {{ assignment.course_name }} • 
+                        Due: {{ assignment.due_date }} • 
+                        Weight: {{ assignment.weight }}%
+                        {% if assignment.grade %} • Grade: {{ assignment.grade }}%{% endif %}
+                    </p>
+                </div>
+                <div class="assignment-actions">
+                    <span class="status-badge status-{{ assignment.status }}">{{ assignment.status }}</span>
+                    <a href="{{ url_for('edit_assignment', assignment_id=assignment.id) }}" class="btn btn-sm">Edit</a>
+                    <form method="POST" action="{{ url_for('delete_assignment', assignment_id=assignment.id) }}" style="display: inline;" onsubmit="return confirm('Delete this assignment?');">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No assignments yet. <a href="{{ url_for('add_assignment') }}">Add your first assignment!</a></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

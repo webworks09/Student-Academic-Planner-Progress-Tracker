@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Academic Planner{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="page-header">
+        <h2>Academic Dashboard</h2>
+        <p class="subtitle">Welcome back, {{ planner.student_name or 'Student' }}! ({{ planner.term or 'No term set' }})</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📖</div>
+            <div class="stat-info">
+                <h3>{{ total_courses }}</h3>
+                <p>Courses</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+                <h3>{{ completed_assignments }}</h3>
+                <p>Completed</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <h3>{{ pending_assignments }}</h3>
+                <p>Pending</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-info">
+                <h3>{{ "%.2f"|format(gpa) }}</h3>
+                <p>GPA (est.)</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-info">
+                <h3>{{ "%.1f"|format(study_hours) }}</h3>
+                <p>Study Hours (7 days)</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-info">
+                <h3>{{ "%.1f"|format(goals_avg) }}%</h3>
+                <p>Goal Progress</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-section">
+        <h3>Upcoming Deadlines</h3>
+        {% if upcoming %}
+            <div class="assignments-list">
+                {% for assignment in upcoming %}
+                <div class="assignment-item">
+                    <div class="assignment-info">
+                        <h4>{{ assignment.title }}</h4>
+                        <p class="assignment-meta">{{ assignment.course_name }} • Due: {{ assignment.due_date }}</p>
+                    </div>
+                    <span class="status-badge status-{{ assignment.status }}">{{ assignment.status }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-state">No upcoming deadlines. Great job!</p>
+        {% endif %}
+    </div>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+            <a href="{{ url_for('add_course') }}" class="btn btn-primary">Add Course</a>
+            <a href="{{ url_for('add_assignment') }}" class="btn btn-primary">Add Assignment</a>
+            <a href="{{ url_for('add_study_session') }}" class="btn btn-primary">Log Study Session</a>
+            <a href="{{ url_for('add_goal') }}" class="btn btn-primary">Add Goal</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

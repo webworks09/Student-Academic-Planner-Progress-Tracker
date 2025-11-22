@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Study Sessions - Academic Planner{% endblock %}
+
+{% block content %}
+<div class="list-page">
+    <div class="page-header">
+        <h2>Study Sessions</h2>
+        <a href="{{ url_for('add_study_session') }}" class="btn btn-primary">+ Log Study Session</a>
+    </div>
+
+    {% if sessions %}
+        <div class="sessions-list">
+            {% for session in sessions %}
+            <div class="session-item">
+                <div class="session-info">
+                    <h4>{{ session.course_name }}</h4>
+                    <p class="session-meta">
+                        Date: {{ session.date }} • 
+                        Duration: {{ "%.2f"|format(session.duration_hours) }} hours
+                        {% if session.notes %}<br>Notes: {{ session.notes }}{% endif %}
+                    </p>
+                </div>
+                <form method="POST" action="{{ url_for('delete_study_session', session_id=session.id) }}" style="display: inline;" onsubmit="return confirm('Delete this study session?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No study sessions logged yet. <a href="{{ url_for('add_study_session') }}">Log your first session!</a></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

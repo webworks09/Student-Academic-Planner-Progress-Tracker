@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Add Goal - Academic Planner{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="page-header">
+        <h2>Add New Goal</h2>
+    </div>
+
+    <form method="POST" class="form">
+        <div class="form-group">
+            <label for="description">Goal Description</label>
+            <textarea id="description" name="description" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="progress">Current Progress (%)</label>
+            <input type="number" id="progress" name="progress" min="0" max="100" value="0" required>
+        </div>
+
+        <div class="form-group">
+            <label for="target_date">Target Date <span class="optional">(optional)</span></label>
+            <input type="date" id="target_date" name="target_date">
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add Goal</button>
+            <a href="{{ url_for('goals') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

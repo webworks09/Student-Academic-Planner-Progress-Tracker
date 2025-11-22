@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Goals - Academic Planner{% endblock %}
+
+{% block content %}
+<div class="list-page">
+    <div class="page-header">
+        <h2>My Goals</h2>
+        <a href="{{ url_for('add_goal') }}" class="btn btn-primary">+ Add Goal</a>
+    </div>
+
+    {% if planner.goals %}
+        <div class="goals-list">
+            {% for goal in planner.goals %}
+            <div class="goal-item">
+                <div class="goal-info">
+                    <h4>{{ goal.description }}</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: {{ goal.progress }}%">
+                            <span class="progress-text">{{ "%.1f"|format(goal.progress) }}%</span>
+                        </div>
+                    </div>
+                    {% if goal.target_date %}
+                    <p class="goal-meta">Target Date: {{ goal.target_date }}</p>
+                    {% endif %}
+                </div>
+                <div class="goal-actions">
+                    <a href="{{ url_for('edit_goal', goal_id=goal.id) }}" class="btn btn-sm">Edit</a>
+                    <form method="POST" action="{{ url_for('delete_goal', goal_id=goal.id) }}" style="display: inline;" onsubmit="return confirm('Delete this goal?');">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <p>No goals set yet. <a href="{{ url_for('add_goal') }}">Add your first goal!</a></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
